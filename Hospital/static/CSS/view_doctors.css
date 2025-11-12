@@ -1,0 +1,123 @@
+body {
+  background: linear-gradient(180deg, #031216, #062628, #003132);
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+/* Title */
+.page-title {
+  text-align: center;
+  margin: 30px 0;
+  color: #00f3d4;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+/* Layout */
+.doctor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 30px;
+  padding: 0 40px 40px;
+}
+
+/* Card */
+.doctor-card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  padding: 20px;
+  color: white;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0,255,209,0.1);
+  transition: transform .3s, box-shadow .3s;
+}
+.doctor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(0,255,209,0.4);
+}
+
+/* Doctor Image */
+.doctor-image {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.doctor-image img {
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+  border: 3px solid #00ffd1;
+  object-fit: cover;
+}
+
+/* Info */
+.doctor-info h4 {
+  font-size: 22px;
+  color: #00ffd1;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.doctor-info p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #d4f9f4;
+  text-align: center;
+}
+
+/* Schedule */
+.schedule-section h6 {
+  text-align: center;
+  margin-top: 18px;
+  font-weight: 600;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0,255,209,0.3);
+}
+
+/* Schedule Card */
+.schedule-card {
+  background: rgba(0,255,209,0.08);
+  border: 1px solid rgba(0,255,209,0.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  text-align: center;
+  transition: 0.3s;
+}
+.schedule-card:hover {
+  background: rgba(0,255,209,0.16);
+}
+
+/* Buttons */
+.btn-book,
+.btn-wait,
+.btn-closed,
+.btn-none {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-book {
+  background: linear-gradient(90deg, #00ffd1, #008889);
+  color: #000;
+}
+.btn-book:hover {
+  opacity: .9;
+}
+
+.btn-wait {
+  background: #ffaa00;
+  color: #000;
+}
+
+.btn-closed,
+.btn-none {
+  background: #ff5757;
+  color: #fff;
+}

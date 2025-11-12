@@ -1,0 +1,53 @@
+{% extends 'navigationBar.html' %}
+{% load static %}
+{% block title %}Patient Login | Hospital Management System{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Login | Hospital Management System</title>
+    <link rel="stylesheet" href="{% static 'CSS/user_login.css' %}">
+</head>
+<body>
+
+<section class="login-section">
+    <div class="login-container">
+        <div class="login-image">
+            <img src="{% static 'images/hospitalbglogin.webp' %}" alt="Hospital Image">
+        </div>
+        <div class="login-form-box">
+            <h2>Patient Login</h2>
+            <p class="subtitle">Access your account and manage your appointments</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="mobile">Mobile Number</label>
+                    <input type="text" id="mobile" name="mobile" placeholder="Enter your mobile number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn">Login</button>
+            </form>
+
+            {% if error == "invalid" %}
+                <p class="error-msg">⚠️ Invalid credentials. Please register first.</p>
+            {% endif %}
+
+            <div class="register-link">
+                Don’t have an account? <a href="{% url 'user-register' %}">Register here</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
+{% endblock %}

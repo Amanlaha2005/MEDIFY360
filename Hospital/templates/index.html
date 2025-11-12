@@ -1,0 +1,38 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+<div style="max-width:1200px;margin:auto;">
+  <h2 style="color:#007b83;text-align:center;font-weight:700;margin-bottom:30px;">🏥 Admin Dashboard</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-bottom:40px;">
+    <div style="background:white;border-radius:12px;padding:25px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+      <h5 style="color:#6c757d;">Doctors</h5><div style="font-size:30px;font-weight:700;color:#007b83;">{{ total.doctors }}</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:25px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+      <h5 style="color:#6c757d;">Patients</h5><div style="font-size:30px;font-weight:700;color:#007b83;">{{ total.patients }}</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:25px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+      <h5 style="color:#6c757d;">Appointments</h5><div style="font-size:30px;font-weight:700;color:#007b83;">{{ total.appointments }}</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:25px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+      <h5 style="color:#6c757d;">Prescriptions</h5><div style="font-size:30px;font-weight:700;color:#007b83;">{{ total.prescriptions }}</div>
+    </div>
+  </div>
+
+  <div style="background:white;padding:25px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+    <h5 style="color:#007b83;margin-bottom:10px;">🕑 Recent Appointments</h5>
+    <table class="table table-hover" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="background:#007b83;color:white;">
+          <th>Doctor</th><th>Patient</th><th>Date</th><th>Time</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in recent_appointments %}
+        <tr><td>{{ a.Doctor.name }}</td><td>{{ a.Patient.name }}</td><td>{{ a.Date1 }}</td><td>{{ a.Time1 }}</td><td>{{ a.status }}</td></tr>
+        {% empty %}
+        <tr><td colspan="5" style="text-align:center;">No recent appointments</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+<div class="container mt-5 text-center">
+  <div class="card shadow p-4">
+    <h4>⚠️ Are you sure you want to delete this appointment?</h4>
+    <p class="text-muted">
+      Doctor: <strong>{{ appointment.Doctor.name }}</strong> <br>
+      Patient: <strong>{{ appointment.Patient.name }}</strong> <br>
+      Date: <strong>{{ appointment.Date1 }}</strong> | Time: <strong>{{ appointment.Time1 }}</strong>
+    </p>
+
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger px-4">🗑 Yes, Delete</button>
+      <a href="{% url 'view_Appointment' %}" class="btn btn-secondary px-4">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

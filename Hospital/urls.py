@@ -1,0 +1,56 @@
+from django.urls import path
+from Hospital.views import *
+
+urlpatterns = [
+    
+    path('about/' ,About , name='about'),
+    path("Dashboard/",Index,name='index'),
+    path('admin_login/' , Admin_Login , name='login'),
+    path('logout/' , Admin_Logout , name = 'logout' ),
+    path('book/',book_appointment, name='book_appointment'),
+    path('' , Home , name='home'),
+    path('contact-us/', Contact , name='contact'),
+    path("contact-medicine/", contact_medicine, name="contact_medicine"),
+    path("admin-feedback/", admin_feedback_list, name="admin_feedback_list"),
+    path('view_doctor/' , view_doctor , name='view_doctor'),
+    path('add_doctor/' , Add_doctor , name='add_doctor'),
+    path('edit_doctor/<int:id>/',edit_doctor, name='edit_doctor'),
+    path('delete_doctor/<int:id>/',delete_doctor, name='delete_doctor'),
+    path('delete_patient(?p<int:id>)/' , delete_patient , name='delete_patient'),
+    path('add_patient/' , Add_patient , name='add_patient'),
+    path('view_patient/' , view_patient , name='view_patient'),
+    path('view_Appointment/' , view_Appointments_admin , name='view_Appointment'),
+    path('edit_appointment/<int:pid>/',edit_appointment, name='edit_appointment'),
+    path('add_appointment/' , Add_Appointment , name='add_appointment'),
+    path('delete_appointment(?p<int:id>)/' , delete_appointment , name='delete_appointment'),
+    path('add_patient_slip/',add_patient_slip, name='add_patient_slip'),
+    path('edit_store_design/',edit_store_design, name='edit_store_design'),
+    path('preview_store_design/',preview_store_design, name='preview_store_design'),
+    path('create_prescription/',create_prescription, name='create_prescription'),
+    path('delete_slip/<int:id>/',delete_slip, name='delete_slip'),
+    path('print_slip/<int:id>/',print_slip, name='print_slip'),
+    path('get_available_slots/',get_available_slots, name='get_available_slots'),
+    path('user_register/' , user_register , name="user-register"),
+    path('user-home/',user_home , name='user-home'),
+    path('user_login/' , user_login , name="user-login"),
+    path('user-profile/' , user_profile , name="user-profile"),
+    path('user-logout/' , user_logout , name = 'user_logout' ),
+    path('user_appointment/' , user_appointment , name='user_appointment'),
+    path('view-doctor/' , view_doctors, name='view_doctors'),
+    path('manage_doctor/',manage_schedule, name='manage_doctor'),
+    path('user-status/' , user_status, name='user_status'),
+    path('user-history/', user_history , name='user_history'),
+    path('user-edit-profile/' ,user_edit_profile , name='user_edit_profile'),
+    path('edit_schedule/<int:id>/' ,edit_schedule , name='edit_schedule'),
+    path('delete_schedule/<int:id>/' ,delete_schedule , name='delete_schedule'),
+    path('daily_collection/',daily_collection, name='daily_collection'),
+    path("edit_slip/<int:id>/",edit_slip, name="edit_slip"),
+    path('daily_collection/pdf/',daily_collection_pdf, name='daily_collection_pdf'),
+    path('contact-doctor/', contact_doctor, name='contact_doctor'),
+    path('profile-settings', profile_settings,name='profile_settings'),
+    path("get-doctor-schedule/<int:doctor_id>/<str:date>/",get_doctor_schedule),
+
+    
+
+]
+

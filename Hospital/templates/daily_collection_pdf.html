@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<style>
+@page {
+    size: A4;
+    margin: 22px;
+}
+
+* {
+    font-family: "Poppins", sans-serif;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+/* ===== BORDER FRAME ===== */
+.frame {
+  border: 8px double #006d77;
+  padding: 12px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.frame-inner {
+  border: 2px solid #00b8c4;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+/* ===== HEADER BOX ===== */
+.header-box {
+  text-align: center;
+  padding: 10px;
+  background: #006d77;
+  color: #ffffff;
+  border-radius: 6px;
+  border: 2px solid #004f53;
+  margin-bottom: 16px;
+}
+
+.header-box h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.decor-line {
+  margin: 6px auto 4px auto;
+  width: 70%;
+  height: 3px;
+  background: #00b8c4;
+  border-radius: 4px;
+}
+
+.header-box p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* ===== TABLE ===== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.table th {
+  background: #004f53;
+  color: white;
+  padding: 8px;
+  border: 1px solid #003b3f;
+}
+
+.table td {
+  padding: 7px;
+  border: 1px solid #8eb6b8;
+  text-align: center;
+}
+
+.table tr:nth-child(even) {
+  background: #e9f7f7;
+}
+
+/* ===== TOTAL ===== */
+.total-box {
+  margin-top: 18px;
+  padding: 10px;
+  text-align: right;
+  background: #006d77;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+/* ===== FOOTER ===== */
+.footer-note {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #444;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="frame">
+<div class="frame-inner">
+
+<div class="header-box">
+    <h1>MAA MEDICINE STORE</h1>
+    <div class="decor-line"></div>
+    <p>STATION BAZAR, JAJPUR ROAD</p>
+    <p>📞 9861182055, 8637219213</p>
+</div>
+
+<table class="table">
+<thead>
+<tr>
+    <th>#</th>
+    <th>Patient Name</th>
+    <th>Doctor</th>
+    <th>Amount (₹)</th>
+    <th>Date</th>
+</tr>
+</thead>
+
+<tbody>
+{% for s in slips %}
+<tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ s.patient_name }}</td>
+    <td>{{ s.doctor.name }}</td>
+    <td>₹{{ s.amount }}</td>
+    <td>{{ s.date|date:"d M Y" }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<div class="total-box">
+   Total Collection: ₹ {{ total_amount }}
+</div>
+
+<div class="footer-note">
+  Thank You for Visiting. Take Care & Stay Healthy.
+</div>
+
+</div>
+</div>
+
+</body>
+</html>

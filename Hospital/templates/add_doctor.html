@@ -1,0 +1,122 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap');
+:root {
+  --primary: #00f0ff;
+  --secondary: #ff006a;
+  --bg-dark: #020617;
+}
+body {
+  background: radial-gradient(circle at center, #001028, #000612 70%);
+  font-family: 'Rajdhani', sans-serif;
+  color: #e0e7ff;
+  overflow-x: hidden;
+}
+
+/* --- Container --- */
+.form-container {
+  width: 80%;
+  margin: 60px auto;
+  background: rgba(15, 25, 50, 0.8);
+  border: 1px solid rgba(0,255,255,0.1);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0,255,255,0.2);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.form-container::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(0,255,255,0.15), transparent);
+  animation: scan 5s linear infinite;
+}
+@keyframes scan {
+  0% { top: -100%; }
+  100% { top: 200%; }
+}
+h2 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 25px;
+  text-shadow: 0 0 15px var(--primary);
+}
+label {
+  color: #9ca3af;
+  font-weight: 600;
+}
+input, select, textarea {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,255,255,0.2);
+  color: #e0f2fe;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+  outline: none;
+}
+.btn-primary {
+  background: linear-gradient(90deg, var(--secondary), var(--primary));
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  color: #fff;
+  display: block;
+  margin: 20px auto 0;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 20px var(--primary);
+  transform: scale(1.05);
+}
+</style>
+
+<div class="form-container">
+  <h2>➕ Add Doctor</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Full Name</label>
+    <input type="text" name="name" placeholder="Enter Doctor Name" required>
+
+    <label>Contact</label>
+    <input type="number" name="contact" placeholder="Enter Mobile Number" required>
+
+    <label>Specialization</label>
+    <input type="text" name="specialization" placeholder="e.g. Cardiologist, Neurologist" required>
+
+    <label>Qualification</label>
+    <input type="text" name="qualification" placeholder="e.g. MBBS, MD" required>
+
+    <label>Experience</label>
+    <input type="text" name="experience" placeholder="e.g. 10 Years" required>
+
+    <label>Gender</label>
+    <select name="gender">
+      <option value="">--Select Gender--</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+    </select>
+
+    <label>Address</label>
+    <textarea name="address" rows="2" placeholder="Enter address"></textarea>
+
+    <label>Profile Image</label>
+    <input type="file" name="image">
+
+    <button type="submit" class="btn-primary">Add Doctor</button>
+  </form>
+</div>
+
+{% endblock %}

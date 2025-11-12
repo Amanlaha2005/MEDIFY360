@@ -1,0 +1,126 @@
+{% extends 'navigationBar.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'CSS/home.css' %}">
+
+<main>
+  <div class="slideshow-container">
+    <div class="slide active">
+      <img src="{% static 'images/hospital1.jpg' %}" alt="Hospital Image 1">
+      <div class="slide-content">
+        <h1>Welcome to Our Hospital</h1>
+        <p>Providing exceptional healthcare with compassion and technology you can trust.</p>
+        <a href="{% url 'user-register' %}" class="btn">Book Appointment</a>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="{% static 'images/hospital2.jpg' %}" alt="Hospital Image 2">
+      <div class="slide-content">
+        <h1>Your Health, Our Priority</h1>
+        <p>We ensure world-class treatment and patient-centered care.</p>
+        <a href="{% url 'user-register' %}" class="btn">Book Appointment</a>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="{% static 'images/hospital3.webp' %}" alt="Hospital Image 3">
+      <div class="slide-content">
+        <h1>Expert Doctors, Modern Facilities</h1>
+        <p>Delivering excellence with our team of top medical professionals.</p>
+        <a href="{% url 'user-register' %}" class="btn">Book Appointment</a>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="{% static 'images/hospital4.jpeg' %}" alt="Hospital Image 4">
+      <div class="slide-content">
+        <h1>24/7 Emergency Support</h1>
+        <p>Always ready to serve you when every second counts.</p>
+        <a href="{% url 'user-register' %}" class="btn">Book Appointment</a>
+      </div>
+    </div>
+
+    <button class="slide-controls prev-btn" onclick="changeSlide(-1)">&#10094;</button>
+    <button class="slide-controls next-btn" onclick="changeSlide(1)">&#10095;</button>
+  </div>
+
+  <section class="info-section reveal">
+    <h2>Our Commitment to Your Care</h2>
+    <p>
+      We aim to provide quality healthcare with cutting-edge facilities, 
+      expert medical professionals, and personalized treatment plans. 
+      From diagnosis to recovery, we ensure you get the best possible care 
+      in a warm, safe, and supportive environment.
+    </p>
+  </section>
+
+  <section class="service-section reveal" id="services">
+    <div class="service-container">
+      <div class="service-box">
+        <h3>🕑 24/7 Emergency</h3>
+        <p>Our emergency department is open round the clock to handle critical cases swiftly and effectively.</p>
+      </div>
+      <div class="service-box">
+        <h3>👨‍⚕️ Expert Doctors</h3>
+        <p>Our team includes highly qualified specialists dedicated to delivering top-quality healthcare.</p>
+      </div>
+      <div class="service-box">
+        <h3>🏥 Modern Equipment</h3>
+        <p>We use state-of-the-art medical technology to ensure accurate diagnosis and effective treatment.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="appointment-section reveal" id="appointment">
+    <h2>Book Your Appointment</h2>
+    <p>We’re here to provide the best medical care at your convenience.</p>
+    <a href="{% url 'user-register' %}" class="btn">Book Now</a>
+  </section>
+</main>
+
+<script>
+let currentIndex = 0;
+const slides = document.querySelectorAll('.slide');
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.toggle('active', i === index);
+  });
+}
+function changeSlide(direction) {
+  currentIndex = (currentIndex + direction + slides.length) % slides.length;
+  showSlide(currentIndex);
+}
+setInterval(() => {
+  changeSlide(1);
+}, 5000);
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+    });
+  });
+});
+window.addEventListener('scroll', reveal);
+
+function reveal() {
+  var reveals = document.querySelectorAll('.reveal');
+  for (var i = 0; i < reveals.length; i++) {
+    var windowHeight = window.innerHeight;
+    var elementTop = reveals[i].getBoundingClientRect().top;
+    var elementVisible = 150;
+    if (elementTop < windowHeight - elementVisible) {
+      reveals[i].classList.add('active');
+    } else {
+      reveals[i].classList.remove('active');
+    }
+  }
+}
+</script>
+
+{% endblock %}

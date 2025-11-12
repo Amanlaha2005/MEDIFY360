@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prescription Slip</title>
+
+<style>
+
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+@page { size: A4; margin: 0; }
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: white;
+  color: #000;
+}
+
+/* === FULL PAGE BORDER FRAME === */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 8mm 15mm;
+  position: relative;
+  box-sizing: border-box;
+  border: 6px double #006d77;
+  border-radius: 14px;
+  background: #ffffff;
+}
+.serial-box {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  background: #ffffff;
+  color: #006d77;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border: 1px solid #006d77;
+  border-radius: 4px;
+}
+
+
+
+.page::before {
+  content: "";
+  position: absolute;
+  top: 6mm; left: 6mm; right: 6mm; bottom: 6mm;
+  border: 2px solid #00b8c4;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: linear-gradient(to right, #006d77, #0aa6b8);
+  color: #fff;
+}
+
+.header .doctor-info h1 {
+  font-size: 22px;
+  margin: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.header .doctor-info p {
+  margin: 2px 0;
+  font-size: 12px;
+}
+
+.doctor-photo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid #11dae5;
+  object-fit: cover;
+}
+
+/* PATIENT INFO */
+.patient-info {
+  border: 1px solid #011112;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #f0fbfb;
+  font-size: 12px;
+  margin-bottom: 18px;
+}
+
+.patient-info div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 3px 0;
+}
+
+/* MAIN ROW */
+.prescription-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* TEST BOX LEFT */
+.test-box {
+  flex: 1;
+  border: 1px solid #007b83;
+  border-radius: 5px;
+  height: 360px;
+  padding: 5px;
+  background: #f5ffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.test-box h4 {
+  text-align: center;
+  margin-bottom: 4px;
+  background: #006d77;
+  color: white;
+  padding: 4px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.test-lines {
+  flex: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 22px,
+    rgba(0,0,0,0.15) 23px
+  );
+  border-radius: 4px;
+}
+
+/* PRESCRIPTION WRITING AREA */
+.prescription {
+  flex: 3;
+  height: 360px;
+  border-radius: 5px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 26px,
+    rgba(0,137,143,0.18) 27px
+  );
+  position: relative;
+}
+
+.rx {
+  position: absolute;
+  top: 48%;
+  left: 48%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  font-size: 110px;
+  color: rgba(0, 123, 131, 0.09);
+  pointer-events: none;
+  font-family: Georgia, serif;
+}
+
+/* FOOTER */
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 14px 0;
+  background: linear-gradient(to right, #0aa6b8, #006d77);
+  color: white;
+  border-radius: 0 0 10px 10px;
+  border-top: 3px solid #004a52;
+}
+
+.footer h2 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.footer p {
+  margin: 2px 0;
+  font-size: 13px;
+}
+
+.print-btn { text-align: center; margin-top: 10px; }
+.print-btn button { padding: 8px 18px; background:#006d77; color:white; border:none; border-radius:5px; cursor:pointer; }
+
+@media print {
+  .print-btn { display: none; }
+  body { margin: 0; }
+}
+/* Token between outer and inner border */
+.token-gap {
+  position: absolute;
+  top: 4mm;                     /* Adjusts vertical placement in gap */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;          /* Matches inner background */
+  padding: 2px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #005b63;
+  border: 1px solid #007b83;
+  border-radius: 6px;
+  z-index: 9999;                /* Ensure it floats above inner border line */
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+  <div class="token-gap">TOKEN NO: {{ serial }}</div>
+  <div class="header">
+    <div class="doctor-info">
+      
+      <h1>Dr. {{ doctor.name }}</h1>
+      {% if doctor.qualification %}<p><b>{{ doctor.qualification }}</b></p>{% endif %}
+      <p>{{ doctor.Special }}</p>
+      {% if doctor.address %}<p><b>Clinic:</b> {{ doctor.address }}</p>{% endif %}
+      {% if doctor.Mobile %}<p><b>Contact:</b> {{ doctor.Mobile }}</p>{% endif %}
+    </div>
+
+    {% if doctor.image %}
+    <img src="{{ doctor.image.url }}" class="doctor-photo">
+    {% endif %}
+  </div>
+
+  <div class="patient-info">
+    <div><span><b>Name:</b> {{ slip.patient_name }}</span><span><b>Age:</b> {{ slip.age }}</span><span><b>Gender:</b> {{ slip.gender }}</span></div>
+    <div><span><b>Mobile:</b> {{ slip.mobile }}</span><span><b>BP:</b> {{ slip.blood_pressure|default:"-" }}</span><span><b>Pulse:</b> {{ slip.pulse|default:"-" }}</span></div>
+    <div><span><b>Weight:</b> {{ slip.weight|default:"-" }}</span><span><b>FBS:</b> {{ slip.fbs|default:"-" }}</span><span><b>PBS:</b> {{ slip.pbs|default:"-" }}</span></div>
+  </div>
+
+  <div class="prescription-row">
+    <div class="test-box">
+      <h4>TESTS</h4>
+      <div class="test-lines"></div>
+    </div>
+    <div class="prescription">
+      <div class="rx">℞</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <h2>{{ store.store_name }}</h2>
+    <p>{{ store.address }}</p>
+    <p>📞 {{ store.phone_numbers }}</p>
+    {% if store.footer_note %}<p><i>{{ store.footer_note }}</i></p>{% endif %}
+  </div>
+
+</div>
+
+<div class="print-btn"><button onclick="window.print()">🖨 Print</button></div>
+
+</body>
+</html>

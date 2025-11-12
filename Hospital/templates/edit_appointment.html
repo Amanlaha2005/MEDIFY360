@@ -1,0 +1,104 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  background: linear-gradient(180deg, #031216, #092c31, #013133);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  max-width: 700px;
+  margin: 60px auto;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(10px);
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,255,209,0.2);
+}
+
+h2 {
+  text-align: center;
+  color: #00ffd1;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0,255,209,0.7);
+  margin-bottom: 25px;
+}
+
+label {
+  color: #00ffd1;
+  font-weight: 600;
+  margin-top: 10px;
+  display: block;
+}
+
+select, input {
+  width: 100%;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding: 10px 15px;
+  margin-top: 8px;
+  margin-bottom: 15px;
+  transition: 0.3s;
+}
+select:focus, input:focus {
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 10px rgba(0,255,209,0.4);
+}
+
+.btn {
+  background: linear-gradient(90deg, #00ffd1, #007b83);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  width: 100%;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  transition: 0.3s;
+}
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0,255,209,0.4);
+}
+</style>
+
+<div class="container">
+  <h2>✏️ Edit Appointment</h2>
+  <form method="POST">
+    {% csrf_token %}
+    
+    <label>👨‍⚕️ Doctor</label>
+    <select name="doctor" required>
+      {% for d in doctors %}
+      <option value="{{ d.id }}" {% if d.id == appt.Doctor.id %}selected{% endif %}>
+        {{ d.name }} ({{ d.Special }})
+      </option>
+      {% endfor %}
+    </select>
+
+    <label>🧍‍♂️ Patient</label>
+    <select name="patient" required>
+      {% for p in patients %}
+      <option value="{{ p.id }}" {% if p.id == appt.Patient.id %}selected{% endif %}>
+        {{ p.name }}
+      </option>
+      {% endfor %}
+    </select>
+
+    <label>📅 Date</label>
+    <input type="date" name="date" value="{{ appt.Date1|date:'Y-m-d' }}" required>
+
+    <label>⏰ Time</label>
+    <input type="time" name="time" value="{{ appt.Time1|time:'H:i' }}" required>
+
+    <button type="submit" class="btn">💾 Update Appointment</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<div style="max-width: 900px; margin: 30px auto; background: #ffffff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); font-family: 'Poppins', sans-serif; animation: fadeIn 0.7s ease;">
+    
+    <h2 style="text-align: center; color: #007b83; font-weight: 700; margin-bottom: 25px;">
+        🩺 My Appointment Status
+    </h2>
+
+    <table style="width:100%; border-collapse: collapse; font-size: 15px;">
+        <thead>
+            <tr style="background:#007b83; color:white;">
+                <th style="padding: 12px;">SL No.</th>
+                <th style="padding: 12px;">Doctor</th>
+                <th style="padding: 12px;">Date</th>
+                <th style="padding: 12px;">Time</th>
+                <th style="padding: 12px;">Waiting No.</th>
+                <th style="padding: 12px;">Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in appointment_data %}
+            <tr style="border-bottom: 1px solid #e6e6e6; transition: 0.3s;">
+                <td style="padding: 12px; text-align:center;">{{ forloop.counter }}</td>
+                <td style="padding: 12px;">Dr. {{ item.appointment.Doctor.name }}</td>
+                <td style="padding: 12px;">{{ item.appointment.Date1 }}</td>
+                <td style="padding: 12px;">{{ item.appointment.Time1 }}</td>
+
+                <td style="padding: 12px; text-align:center;">
+                    <span style="background:#e7f8f6; color:#007b83; padding:4px 10px; border-radius:6px; font-weight:600;">
+                        {{ item.waiting }}
+                    </span>
+                </td>
+
+                <td style="padding: 12px;">
+                    {% if item.appointment.status == "Upcoming" %}
+                        <span style="background:#dff9ff; color:#007bff; padding:6px 12px; border-radius:8px; font-weight:600;">Upcoming</span>
+                    {% elif item.appointment.status == "Ongoing" %}
+                        <span style="background:#fff3cd; color:#856404; padding:6px 12px; border-radius:8px; font-weight:600;">Ongoing</span>
+                    {% else %}
+                        <span style="background:#e2e3e5; color:#6c757d; padding:6px 12px; border-radius:8px; font-weight:600;">Completed</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center; padding: 20px; color:#777;">No Appointments Found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+tbody tr:hover {
+  background: #f4fefd;
+  transform: scale(1.01);
+}
+</style>
+
+{% endblock %}

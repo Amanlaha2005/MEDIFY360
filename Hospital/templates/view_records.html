@@ -1,0 +1,54 @@
+{% extends 'navigationBar.html' %}
+{% load static %}
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Medical Records | Hospital Management System</title>
+    <link rel="stylesheet" href="{% static 'CSS/view_records.css' %}">
+</head>
+<body>
+    <section class="records-section">
+        <div class="container">
+            <h2 class="page-title">Your Medical Records</h2>
+            <p class="subtitle">Here you can view your previous consultations, test reports, and doctor details.</p>
+
+            <div class="records-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Doctor</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Report Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.doctor }}</td>
+                            <td>{{ record.department }}</td>
+                            <td class="{% if record.status == 'Completed' %}status-completed{% else %}status-pending{% endif %}">
+                                {{ record.status }}
+                            </td>
+                            <td>{{ record.report }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="no-data">No records found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
+{% endblock %}

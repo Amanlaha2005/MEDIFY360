@@ -1,0 +1,40 @@
+{% extends 'navigationBar.html' %}
+{% load static %}
+{% block body %}
+
+<!-- ✅ Link CSS -->
+<link rel="stylesheet" href="{% static 'css/user-history.css' %}">
+
+<div class="appointment-section">
+  <h2 class="page-title"><i class="fas fa-calendar-check"></i> Appointment History</h2>
+
+  {% if appointments %}
+  <div class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Doctor</th>
+          <th>Patient Name</th>
+          <th>Date</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for app in appointments %}
+        <tr>
+          <td data-label="Doctor">{{ app.Doctor.name }}</td>
+          <td data-label="Patient">{{ app.Patient.name }}</td>
+          <td data-label="Date">{{ app.Date1 }}</td>
+          <td data-label="Time">{{ app.Time1 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="no-data">No appointment history available.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

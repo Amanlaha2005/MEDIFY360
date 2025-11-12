@@ -1,0 +1,183 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<style>
+/* Page Container */
+.appointment-container{
+    max-width: 1200px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+}
+
+/* Heading */
+.appointment-title{
+    text-align: center;
+    font-weight: 700;
+    font-size: 28px;
+    color: #007b83;
+    margin-bottom: 25px;
+}
+
+/* Filters Row */
+.filter-bar .form-control, .filter-bar select {
+    border-radius: 8px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+table th {
+    background: #007b83;
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px 6px 0 0;
+}
+
+table td {
+    background: #f8f9fa;
+    padding: 12px;
+    font-size: 15px;
+    border-bottom: 2px solid #e2e2e2;
+}
+
+/* Hover effect */
+tr:hover td {
+    background: #e6fffa;
+}
+
+/* Status Badges */
+.badge-upcoming{
+    background: #ffc107;
+    color: #000;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.badge-ongoing{
+    background: #28a745;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.badge-completed{
+    background: #6c757d;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+/* Buttons */
+.action-btn{
+    padding: 4px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+.action-edit{
+    background: #007bff;
+    color: white;
+}
+
+.action-delete{
+    background: #dc3545;
+    color: white;
+}
+.action-edit:hover { opacity: 0.85; }
+.action-delete:hover { opacity: 0.85; }
+
+</style>
+
+
+<div class="appointment-container">
+    <h2 class="appointment-title">📅 Manage Appointments</h2>
+
+    <!-- Filter Bar -->
+    <form method="GET" class="filter-bar row mb-4 g-3">
+        <div class="col-md-4">
+            <input type="text" name="q" class="form-control" value="{{ query }}" placeholder="Search Doctor / Patient / Date">
+        </div>
+
+        <div class="col-md-3">
+            <select name="doctor" class="form-control">
+                <option value="">Filter by Doctor</option>
+                {% for d in doctors %}
+                <option value="{{ d.id }}" {% if doctor_filter == d.id|stringformat:"s" %} selected {% endif %}>{{ d.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <input type="date" name="date" class="form-control" value="{{ date_filter }}">
+        </div>
+
+        <div class="col-md-2">
+            <select name="status" class="form-control">
+                <option value="">Status</option>
+                {% for s in statuses %}
+                <option value="{{ s }}" {% if status_filter == s %} selected {% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-12 text-end mt-2">
+            <button class="btn btn-success px-4">Filter</button>
+            <a href="{% url 'view_Appointment' %}" class="btn btn-secondary px-4">Reset</a>
+        </div>
+    </form>
+
+    <!-- Appointment Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>SL No.</th>
+                <th>Doctor</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th style="text-align:center;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for a in appointments %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ a.Doctor.name }}</td>
+                <td>{{ a.Patient.name }}</td>
+                <td>{{ a.Date1 }}</td>
+                <td>{{ a.Time1 }}</td>
+
+                <td>
+                    {% if a.status == "Upcoming" %}
+                    <span class="badge-upcoming">Upcoming</span>
+                    {% elif a.status == "Ongoing" %}
+                    <span class="badge-ongoing">Ongoing</span>
+                    {% else %}
+                    <span class="badge-completed">Completed</span>
+                    {% endif %}
+                </td>
+
+                <td style="text-align:center;">
+                    <a href="{% url 'edit_appointment' a.id %}" class="action-btn action-edit">Edit</a>
+                    <a href="{% url 'delete_appointment' a.id %}" class="action-btn action-delete" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+
+            {% empty %}
+            <tr><td colspan="7" class="text-center py-3">No Appointments Available</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

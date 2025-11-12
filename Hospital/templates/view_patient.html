@@ -1,0 +1,123 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(180deg, #06121a, #0c2e33, #092b2e);
+  color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #620212;
+  text-shadow: 0 0 8px rgba(0,255,209,0.6);
+  margin-bottom: 30px;
+}
+
+.patient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  text-align: center;
+  transition: 0.3s;
+  animation: fadeIn 0.8s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 35px rgba(0,255,209,0.2);
+}
+
+.card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,255,209,0.5);
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.card h4 {
+  color: #0c06ba;
+  margin-bottom: 5px;
+}
+
+.card p {
+  font-size: 13px;
+  color: #1f0000;
+  margin: 2px 0;
+}
+
+.btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-edit {
+  background: linear-gradient(90deg, #00ffd1, #007b83);
+}
+.btn-delete {
+  background: linear-gradient(90deg, #ff4b5c, #d83445);
+  margin-left: 5px;
+}
+.btn:hover {
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform:translateY(20px);}
+  to {opacity:1; transform:translateY(0);}
+}
+</style>
+
+<div class="container">
+  <h2>🧾 View Patients</h2>
+
+  <div class="patient-grid">
+    {% for p in poc %}
+    <div class="card">
+      {% if p.Picture %}
+        <img src="{{ p.Picture.url }}" alt="Patient">
+      {% else %}
+        <img src="https://cdn-icons-png.flaticon.com/512/219/219986.png" alt="Default">
+      {% endif %}
+      <h4>{{ p.name }}</h4>
+      <p><b>Age:</b> {{ p.Age }}</p>
+      <p><b>Gender:</b> {{ p.Gender }}</p>
+      <p><b>Mobile:</b> {{ p.Mobile }}</p>
+      <p><b>Address:</b> {{ p.Address }}</p>
+
+      
+      <a href="{% url 'delete_patient' p.id %}" onclick="return confirm('Delete {{ p.name }}?');"><button class="btn btn-delete">🗑️ Delete</button></a>
+    </div>
+    {% empty %}
+      <p>No patients found.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

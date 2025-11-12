@@ -1,0 +1,191 @@
+{% extends 'navigationBar.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+.doctors-section {
+  padding: 40px 5%;
+}
+.page-title {
+  text-align: center;
+  font-size: 34px;
+  color: #0059ff;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+.doctor-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+.doctor-card {
+  width: 340px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0px 0px 15px rgba(0,0,0,0.15);
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 15px;
+}
+.doctor-image img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-top: 20px;
+}
+.doctor-info h4 {
+  color: #0044aa;
+  margin: 15px 0 5px;
+  font-size: 20px;
+}
+.schedule-section {
+  margin-top: 12px;
+  text-align: left;
+  padding: 10px 20px;
+}
+.schedule-card {
+  background: #f7f9ff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  border-left: 4px solid #007bff;
+}
+.schedule-card p {
+  margin: 2px 0;
+}
+
+/* Buttons */
+.action-btn {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-book {
+  background: #007bff !important;
+  color: white !important;
+}
+.btn-wait {
+  background: #ff9800 !important;
+  color: white !important;
+}
+.btn-closed {
+  background: #d9534f !important;
+  color: white !important;
+}
+.btn-none {
+  background: gray !important;
+  color: white !important;
+}
+</style>
+
+<div class="doctors-section">
+  <h2 class="page-title"><i class="fas fa-user-md"></i> OUR DOCTORS</h2>
+
+  <div class="doctor-grid">
+
+    {% for item in doctor_data %}
+    <div class="doctor-card">
+
+      <div class="doctor-image">
+        {% if item.doctor.image %}
+          <img src="{{ item.doctor.image.url }}">
+        {% else %}
+          <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png">
+        {% endif %}
+      </div>
+
+      <div class="doctor-info">
+        <h4>{{ item.doctor.name }}</h4>
+        <p><strong>Specialization:</strong> {{ item.doctor.Special }}</p>
+        <p><strong>Mobile:</strong> {{ item.doctor.Mobile }}</p>
+
+        <div class="schedule-section">
+          <h6><strong>Available Schedules:</strong></h6>
+
+          {% if item.schedules %}
+            {% for sch in item.schedules %}
+
+              <div class="schedule-card"
+                data-bookstart="{% if sch.booking_start %}{{ sch.booking_start|date:'Y-m-d H:i:s' }}{% endif %}"
+                data-bookend="{% if sch.booking_end %}{{ sch.booking_end|date:'Y-m-d H:i:s' }}{% endif %}"
+                data-url="{% url 'user_appointment' %}?schedule_id={{ sch.id }}">
+
+                <p><strong>Date:</strong> {{ sch.date }}</p>
+                <p><strong>Time:</strong> {{ sch.start_time }} – {{ sch.end_time }}</p>
+
+                {% if sch.booking_start and sch.booking_end %}
+                  <small style="color:gray;">
+                    <strong>Booking Window:</strong> {{ sch.booking_start|date:"M d, Y h:i A" }} → {{ sch.booking_end|date:"M d, Y h:i A" }}
+                  </small>
+                {% endif %}
+
+                <button class="action-btn btn-book">Book Now</button>
+
+              </div>
+
+            {% endfor %}
+          {% else %}
+            <p>No schedules available</p>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<script>
+function updateButtons() {
+  const now = new Date();
+
+  document.querySelectorAll('.schedule-card').forEach(card => {
+    const bookStart = card.dataset.bookstart ? new Date(card.dataset.bookstart) : null;
+    const bookEnd = card.dataset.bookend ? new Date(card.dataset.bookend) : null;
+    const btn = card.querySelector('.action-btn');
+
+    // No booking window -> Always Book Now
+    if (!bookStart || !bookEnd) {
+      btn.className = "action-btn btn-book";
+      btn.disabled = false;
+      btn.textContent = "Book Now";
+      btn.onclick = () => window.location = card.dataset.url;
+      return;
+    }
+
+    if (now < bookStart) {
+      btn.className = "action-btn btn-wait";
+      btn.disabled = true;
+      btn.textContent = `Booking starts at ${bookStart.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
+      btn.onclick = null;
+    }
+    else if (now > bookEnd) {
+      btn.className = "action-btn btn-closed";
+      btn.disabled = true;
+      btn.textContent = "Booking Closed";
+      btn.onclick = null;
+    }
+    else {
+      btn.className = "action-btn btn-book";
+      btn.disabled = false;
+      btn.textContent = "Book Now";
+      btn.onclick = () => window.location = card.dataset.url;
+    }
+  });
+}
+
+setInterval(updateButtons, 10000); // check every 10 seconds
+updateButtons();
+
+</script>
+
+{% endblock %}

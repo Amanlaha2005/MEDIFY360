@@ -1,0 +1,76 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Edit Slip</h2>
+  <form method="POST" class="shadow p-4 rounded bg-light">
+    {% csrf_token %}
+
+    <label><b>Doctor</b></label>
+    <select name="doctor_id" class="form-control mb-3">
+      {% for d in doctors %}
+      <option value="{{ d.id }}" {% if slip.doctor.id == d.id %}selected{% endif %}>{{ d.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label><b>Patient Name</b></label>
+    <input type="text" name="patient_name" value="{{ slip.patient_name }}" class="form-control mb-3">
+
+    <label><b>Age</b></label>
+    <input type="number" name="age" value="{{ slip.age }}" class="form-control mb-3">
+
+    <label><b>Gender</b></label>
+    <select name="gender" class="form-control mb-3">
+      <option {% if slip.gender == "Male" %}selected{% endif %}>Male</option>
+      <option {% if slip.gender == "Female" %}selected{% endif %}>Female</option>
+    </select>
+
+    <label><b>Mobile</b></label>
+    <input type="text" name="mobile" value="{{ slip.mobile }}" class="form-control mb-3">
+
+    <div class="row">
+
+      <div class="col-md-4">
+        <label><b>Blood Pressure</b></label>
+        <input type="text" name="blood_pressure" value="{{ slip.blood_pressure }}" class="form-control mb-3">
+      </div>
+
+      <div class="col-md-4">
+        <label><b>Pulse</b></label>
+        <input type="text" name="pulse" value="{{ slip.pulse }}" class="form-control mb-3">
+      </div>
+
+      <div class="col-md-4">
+        <label><b>Weight</b></label>
+        <input type="text" name="weight" value="{{ slip.weight }}" class="form-control mb-3">
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6">
+        <label><b>FBS</b></label>
+        <input type="text" name="fbs" value="{{ slip.fbs }}" class="form-control mb-3">
+      </div>
+
+      <div class="col-md-6">
+        <label><b>PBS</b></label>
+        <input type="text" name="pbs" value="{{ slip.pbs }}" class="form-control mb-3">
+      </div>
+
+    </div>
+
+    <label><b>Amount</b></label>
+    <input type="number" name="amount" value="{{ slip.amount }}" class="form-control mb-3">
+
+    <button class="btn btn-success mt-2 w-100">Update</button>
+
+    <a href="{% url 'print_slip' slip.id %}" class="btn btn-secondary w-100 mt-2" target="_blank">
+      🖨 Print Slip
+    </a>
+
+  </form>
+</div>
+
+{% endblock %}

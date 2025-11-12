@@ -1,0 +1,156 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<div class="container my-4">
+
+  <style>
+    .page-title{font-weight:800;color:#0a4d4f;text-align:center;margin-bottom:18px}
+    .card-soft{background:#ffffff;border:1px solid #e7f5f5;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    .card-soft .card-header{background:linear-gradient(90deg,#0aa1a9,#0a6f72);color:#fff;border-top-left-radius:14px;border-top-right-radius:14px;padding:14px 18px}
+    .form-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+    .col-3{grid-column:span 3}.col-4{grid-column:span 4}.col-6{grid-column:span 6}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
+    .label{font-weight:600;color:#0a6f72;margin-bottom:6px}
+    .control{height:44px;border:1px solid #cfe8e8;border-radius:10px;padding:8px 12px}
+    .control:focus{outline:0;border-color:#0aa1a9;box-shadow:0 0 0 3px rgba(10,161,169,.15)}
+    .btn-primaryx{background:#0aa1a9;border:none;border-radius:10px;padding:10px 18px;color:#fff;font-weight:600}
+    .btn-primaryx:hover{background:#0a8086}
+    .btn-soft{background:#eefafa;color:#0a6f72;border:1px solid #cfe8e8;border-radius:10px;padding:8px 14px}
+    .badge-open{background:#e6fff5;color:#087954;padding:6px 10px;border-radius:999px;font-weight:700}
+    .badge-closed{background:#fff0f0;color:#a31212;padding:6px 10px;border-radius:999px;font-weight:700}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    th{background:#0aa1a9;color:#fff;padding:10px 12px;font-weight:700}
+    td{background:#ffffff;padding:10px 12px;border-top:1px solid #dff1f1;border-bottom:1px solid #dff1f1}
+    tr td:first-child{border-left:1px solid #dff1f1;border-top-left-radius:10px;border-bottom-left-radius:10px}
+    tr td:last-child{border-right:1px solid #dff1f1;border-top-right-radius:10px;border-bottom-right-radius:10px}
+    .hint{font-size:12px;color:#6d8a8a;margin-top:-6px}
+    @media (max-width: 992px){.col-3,.col-4,.col-6,.col-8,.col-12{grid-column:span 12}}
+  </style>
+
+  <h2 class="page-title">Manage Doctor Schedules</h2>
+
+  <!-- ADD / EDIT FORM -->
+  <div class="card-soft mb-4">
+    <div class="card-header">Create New Schedule</div>
+    <div class="p-3">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-grid">
+          <div class="col-4">
+            <div class="label">Doctor</div>
+            <select name="doctor_id" class="control" required>
+              <option value="">-- Select Doctor --</option>
+              {% for d in doctors %}
+                <option value="{{ d.id }}">Dr. {{ d.name }} ({{ d.Special }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-4">
+            <div class="label">Date</div>
+            <input type="date" name="date" class="control" required>
+          </div>
+
+          <div class="col-2">
+            <div class="label">Start Time</div>
+            <input type="time" name="start_time" class="control" required>
+          </div>
+
+          <div class="col-2">
+            <div class="label">End Time</div>
+            <input type="time" name="end_time" class="control" required>
+          </div>
+
+          <div class="col-4">
+            <div class="label">Schedule Type</div>
+            <select name="schedule_type" id="scheduleType" class="control" required>
+              <option value="Daily">Daily (Always Bookable)</option>
+              <option value="Custom">Custom (Window)</option>
+            </select>
+            <div class="hint">Daily = user always sees “Book”; Custom = show booking start/end window</div>
+          </div>
+
+          <div class="col-4 custom-win" style="display:none">
+            <div class="label">Booking Start</div>
+            <input type="datetime-local" name="booking_start" class="control">
+          </div>
+
+          <div class="col-4 custom-win" style="display:none">
+            <div class="label">Booking End</div>
+            <input type="datetime-local" name="booking_end" class="control">
+          </div>
+
+          <div class="col-12">
+            <button type="submit" class="btn-primaryx">Save Schedule</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- LIST -->
+  <div class="card-soft">
+    <div class="card-header">Existing Schedules</div>
+    <div class="p-3 table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Booking Window</th>
+            <th>Status Now</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in schedules %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>Dr. {{ s.doctor.name }}</td>
+            <td>{{ s.date }}</td>
+            <td>{{ s.start_time }} – {{ s.end_time }}</td>
+            <td>{{ s.schedule_type }}</td>
+            <td>
+              {% if s.schedule_type == 'Custom' and s.booking_start and s.booking_end %}
+                {{ s.booking_start|date:"d M Y, H:i" }} → {{ s.booking_end|date:"d M Y, H:i" }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              {% if s.is_booking_open %}
+                <span class="badge-open">OPEN</span>
+              {% else %}
+                <span class="badge-closed">CLOSED</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'edit_schedule' s.id %}" class="btn-soft">Edit</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="8" style="text-align:center;color:#7a9b9b">No schedules yet</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  const typeSel = document.getElementById('scheduleType');
+  const winFields = document.querySelectorAll('.custom-win');
+  function toggleCustom() {
+    const show = typeSel.value === 'Custom';
+    winFields.forEach(el => el.style.display = show ? 'block' : 'none');
+  }
+  typeSel.addEventListener('change', toggleCustom);
+  toggleCustom();
+</script>
+
+{% endblock %}

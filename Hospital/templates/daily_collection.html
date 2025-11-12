@@ -1,0 +1,76 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Daily Collection Report</h2>
+
+  <form method="GET" class="row g-3 mb-4">
+  <div class="col-md-4">
+    <label><b>Doctor</b></label>
+    <select name="doctor_id" class="form-control">
+      <option value="">All Doctors</option>
+      {% for d in doctors %}
+      <option value="{{ d.id }}" {% if selected_doctor == d.id|stringformat:"s" %}selected{% endif %}>
+        {{ d.name }}
+      </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <label><b>Date</b></label>
+    <input type="date" name="date" class="form-control" value="{{ request.GET.date }}">
+    </div>
+  <div class="col-md-4 d-flex align-items-end">
+    <button class="btn btn-primary w-100">Filter</button>
+  </div>
+</form>
+
+  {% if slips %}
+  <a href="{% url 'daily_collection_pdf' %}?doctor_id={{ selected_doctor }}&date={{ selected_date }}" 
+   class="btn btn-danger mb-3" target="_blank">
+   📄 Download PDF
+</a>
+
+  <table class="table table-bordered table-striped text-center">
+  <thead class="table-success">
+    <tr>
+      <th>#</th>
+      <th>Doctor</th>
+      <th>Patient</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for s in slips %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ s.doctor.name }}</td>
+      <td>{{ s.patient_name }}</td>
+      <td>₹{{ s.amount }}</td>
+      <td>{{ s.date|date:"d M Y" }}</td>
+      <td><a href="{% url 'edit_slip' s.id %}" class="btn btn-warning btn-sm">Edit</a></td>
+      <td>
+  <a href="{% url 'delete_slip' s.id %}" class="btn btn-danger btn-sm"
+     onclick="return confirm('Are you sure you want to delete this slip?');">
+     Delete
+  </a>
+</td>
+
+    </tr>
+    {% empty %}
+    <tr><td colspan="6" class="text-danger">No Records Found</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h4 class="text-end mt-3"><b>Total Collection:</b> ₹{{ total_amount }}</h4>
+
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'navigationBar.html' %}
+{% load static %}
+{% block title %}User Dashboard | Hospital Management System{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | Hospital Management System</title>
+    <link rel="stylesheet" href="{% static 'CSS/user_home.css' %}">
+</head>
+<body>
+
+<section class="user-dashboard">
+    <div class="dashboard-overlay"></div>
+
+    <!-- Header Section -->
+    <header class="dashboard-header">
+        <div class="profile">
+            <img src="{% static 'images/patient-avatar.jpg' %}" alt="User Avatar" class="avatar">
+            <h2>Welcome, {{ user_name|default:"Patient" }} 👋</h2>
+            <p>Your personalized dashboard to manage appointments and records effortlessly.</p>
+        </div>
+    </header>
+
+    <!-- Dashboard Cards -->
+    <div class="dashboard-cards">
+        <div class="card fade-in delay-0">
+            <img src="{% static 'images/appointment.png' %}" alt="Appointment">
+            <h3>Book Appointment</h3>
+            <p>Schedule a consultation with top medical specialists with just one click.</p>
+            <a href="{% url 'user_appointment' %}" class="btn">Book Now</a>
+        </div>
+
+        <div class="card fade-in delay-1">
+            <img src="{% static 'images/report.png' %}" alt="Reports">
+            <h3>View Reports</h3>
+            <p>Access and download your medical reports securely anytime.</p>
+            <a href="{% url 'user_history' %}" class="btn">View Reports</a>
+        </div>
+
+        <div class="card fade-in delay-2">
+            <img src="{% static 'images/doctor.jpg' %}" alt="Doctor Contact">
+            <h3>Contact Doctor</h3>
+            <p>Stay connected with your doctors and receive expert guidance instantly.</p>
+            <a href="{% url 'contact_doctor' %}" class="btn">Contact</a>
+        </div>
+
+        <div class="card fade-in delay-3">
+            <img src="{% static 'images/settings.jpeg' %}" alt="Profile Settings">
+            <h3>Profile Settings</h3>
+            <p>Update your profile details and manage your health account preferences.</p>
+            <a href="{% url 'user-profile' %}" class="btn">Manage</a>
+        </div>
+    </div>
+
+    <!-- About and Health Tips Section -->
+    <section class="info-section fade-in">
+        <div class="info-content">
+            <h2>About Our Services</h2>
+            <p>
+                At <strong>LifeCare Hospital</strong>, we are committed to delivering quality healthcare with compassion. 
+                Our state-of-the-art facilities, experienced doctors, and 24/7 support ensure that every patient receives 
+                the best medical attention. From appointment booking to report access, our digital portal brings 
+                healthcare to your fingertips.
+            </p>
+        </div>
+
+        <div class="tips-section fade-in delay-1">
+            <h2>🩺 Daily Health Tips</h2>
+            <ul>
+                <li>🥗 Eat balanced meals rich in fruits and vegetables.</li>
+                <li>🚶‍♀️ Exercise regularly to keep your heart healthy.</li>
+                <li>💧 Stay hydrated — drink at least 8 glasses of water a day.</li>
+                <li>🧘‍♂️ Take breaks and manage stress with mindfulness.</li>
+                <li>💤 Sleep 7–8 hours each night for optimal recovery.</li>
+            </ul>
+        </div>
+    </section>
+
+</section>
+
+</body>
+</html>
+{% endblock %}

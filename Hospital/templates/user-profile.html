@@ -1,0 +1,34 @@
+{% extends 'navigationBar.html' %}
+{% load static %}
+{% block body %}
+
+<!-- ✅ Link CSS -->
+<link rel="stylesheet" href="{% static 'css/user_profile.css' %}">
+
+<div class="profile-container">
+
+  <div class="profile-card">
+    <div class="profile-image-wrapper">
+      {% if patient.Picture %}
+        <img src="{{ patient.Picture.url }}" alt="{{ patient.name }}" class="profile-image">
+      {% else %}
+        <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="Default Avatar" class="profile-image">
+      {% endif %}
+
+      <a href="{% url 'user_edit_profile' %}" class="edit-btn" title="Edit Profile">
+        <i class="fas fa-user-edit"></i> Edit
+      </a>
+    </div>
+
+    <h3 class="profile-name">{{ patient.name }}</h3>
+    <div class="profile-details">
+      <p><strong>Age:</strong> {{ patient.Age }}</p>
+      <p><strong>Gender:</strong> {{ patient.Gender }}</p>
+      <p><strong>Mobile:</strong> {{ patient.Mobile }}</p>
+      <p><strong>Address:</strong> {{ patient.Address }}</p>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

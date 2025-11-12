@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+
+  <style>
+    /* 🌿 Global Styling */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f8f9;
+      color: #1a1a1a;
+    }
+
+    /* 🌈 Navbar Styling */
+    .navbar {
+      background: linear-gradient(90deg, #004c4c, #007b83);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 14px 30px;
+    }
+
+    .navbar-brand {
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .navbar-brand:hover {
+      color: #b2f7f2 !important;
+    }
+
+    .nav-link {
+      color: #f1f1f1 !important;
+      font-weight: 500;
+      margin: 0 10px;
+      border-radius: 8px;
+      transition: 0.3s;
+      padding: 6px 12px;
+    }
+
+    .nav-link:hover {
+      background-color: rgba(255,255,255,0.1);
+      color: #00ffd1 !important;
+      box-shadow: 0 0 8px rgba(0,255,209,0.2);
+    }
+
+    .dropdown-menu {
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    .dropdown-item {
+      color: #004c4c;
+      font-weight: 500;
+      padding: 10px 18px;
+      transition: 0.3s;
+    }
+
+    .dropdown-item:hover {
+      background-color: #007b83;
+      color: white;
+    }
+
+    .logout-btn {
+      background: linear-gradient(90deg, #ff4b5c, #d83445);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 76, 76, 0.4);
+    }
+
+    /* 🩺 Page Body Container */
+    .page-body {
+      min-height: 85vh;
+      padding: 40px 25px;
+      background-color: #f4f8f9;
+    }
+
+    /* 🌙 Footer */
+    footer {
+      background: #004c4c;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      margin-top: 30px;
+    }
+
+    footer a {
+      color: #00ffd1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 991px) {
+      .nav-link {
+        margin: 6px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}">🏥 MEDIFY 360</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav">
+
+          {% if not request.user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Admin</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user-register' %}">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user-login' %}">Login</a></li>
+
+          {% elif request.user.is_staff %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Dashboard</a></li>
+
+            <!-- 👨‍⚕️ Doctor Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="doctorDropdown" data-bs-toggle="dropdown">Doctor</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'add_doctor' %}">Add Doctor</a></li>
+                <li><a class="dropdown-item" href="{% url 'view_doctor' %}">View Doctor</a></li>
+                <li><a class="dropdown-item" href="{% url 'manage_doctor' %}">Doctor Schedule</a></li>
+              </ul>
+            </li>
+
+            <!-- 🧍 Patient Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="patientDropdown" data-bs-toggle="dropdown">Patient</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'add_patient' %}">Add Patient</a></li>
+                <li><a class="dropdown-item" href="{% url 'view_patient' %}">View Patient</a></li>
+                
+              </ul>
+            </li>
+
+            <!-- 📅 Appointment Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="appointmentDropdown" data-bs-toggle="dropdown">Appointment</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'add_appointment' %}">Add Appointment</a></li>
+                <li><a class="dropdown-item" href="{% url 'view_Appointment' %}">View Appointment</a></li>
+              </ul>
+            </li>
+
+            <!-- 💊 Billing -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="billingDropdown" data-bs-toggle="dropdown">Billing</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'add_patient_slip' %}">OPD Billing</a></li>
+                <li><a class="dropdown-item" href="{% url 'daily_collection' %}">Collection</a></li>
+                
+                
+              </ul>
+            </li>
+
+            <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'admin_feedback_list' %}">Feedback</a></li>
+            <li class="nav-item">
+              <form action="{% url 'logout' %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button class="logout-btn">Logout</button>
+              </form>
+            </li>
+
+          {% else %}
+            <!-- Normal user -->
+            <li class="nav-item"><a class="nav-link" href="{% url 'user-home' %}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'view_doctors' %}">View Doctors</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user_status' %}">Status</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user_history' %}">History</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user-profile' %}">Profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'contact_medicine' %}">Contact</a></li>
+            <li class="nav-item">
+              <form action="{% url 'user_logout' %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button class="logout-btn">Logout</button>
+              </form>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🌿 Page Content -->
+  <div class="page-body">
+    {% block body %}{% endblock %}
+  </div>
+
+  <!-- 🌙 Footer -->
+  <footer>
+    © {{ year|default:2025 }} Hospital Management System | Designed by <a href="#">Aman</a>
+  </footer>
+
+</body>
+</html>

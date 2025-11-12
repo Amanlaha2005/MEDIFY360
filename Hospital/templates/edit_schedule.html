@@ -1,0 +1,82 @@
+{% extends 'navigationBar.html' %}
+{% block body %}
+
+<style>
+.edit-box { background:white; padding:25px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.15); }
+.form-label { font-weight:600; }
+.d-none { display:none!important; }
+</style>
+
+<div class="container mt-4">
+  <h3 class="text-center mb-4">Edit Schedule</h3>
+
+  <form method="POST" class="edit-box">
+    {% csrf_token %}
+
+    <div class="form-group mb-3">
+      <label class="form-label">Doctor</label>
+      <select class="form-control" name="doctor_id" required>
+        {% for doc in doctors %}
+          <option value="{{ doc.id }}" {% if doc.id == schedule.doctor.id %}selected{% endif %}>{{ doc.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Date</label>
+        <input type="date" name="date" class="form-control" value="{{ schedule.date|date:'Y-m-d' }}" required>
+      </div>
+      
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Schedule Type</label>
+        <select class="form-control" id="scheduleType" name="schedule_type">
+          <option value="Daily" {% if schedule.schedule_type == 'Daily' %}selected{% endif %}>Daily</option>
+          <option value="Custom" {% if schedule.schedule_type == 'Custom' %}selected{% endif %}>Custom</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Start Time</label>
+        <input type="time" name="start_time" class="form-control" value="{{ schedule.start_time|time:'H:i' }}" required>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label">End Time</label>
+        <input type="time" name="end_time" class="form-control" value="{{ schedule.end_time|time:'H:i' }}" required>
+      </div>
+    </div>
+
+    <div class="row custom-fields {% if schedule.schedule_type != 'Custom' %}d-none{% endif %}">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Booking Start</label>
+        <input type="datetime-local" name="booking_start" class="form-control"
+               value="{{ schedule.booking_start|date:'Y-m-d\\TH:i' }}">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Booking End</label>
+        <input type="datetime-local" name="booking_end" class="form-control"
+               value="{{ schedule.booking_end|date:'Y-m-d\\TH:i' }}">
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button class="btn btn-success px-4">Update</button>
+      <a href="{% url 'manage_doctor' %}" class="btn btn-secondary px-4">Cancel</a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+function toggleScheduleType(){
+  const isCustom = document.getElementById("scheduleType").value === "Custom";
+  document.querySelector(".custom-fields").classList.toggle("d-none", !isCustom);
+}
+document.getElementById("scheduleType").addEventListener("change", toggleScheduleType);
+document.addEventListener("DOMContentLoaded", toggleScheduleType);
+</script>
+
+{% endblock %}

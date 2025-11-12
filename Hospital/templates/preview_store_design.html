@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Design Preview</title>
+  <style>
+    body {
+      font-family: "Times New Roman", serif;
+      margin: 30px;
+      color: #000;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #000;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 24px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .sub { font-size: 14px; }
+    .doctor-info { font-size: 14px; line-height: 1.4; margin-top: 5px; }
+    .details { margin-top: 25px; font-size: 15px; }
+    .line { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .footer { border-top: 2px solid #000; margin-top: 30px; padding-top: 10px; text-align: center; font-style: italic; }
+    .note { color: #777; font-size: 13px; text-align: center; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h2>{{ store.store_name }}</h2>
+  <div class="sub">{{ store.address }} | MOB: {{ store.phone_numbers }}</div>
+  <div class="doctor-info">
+    <strong>{{ store.doctor_name }}</strong><br>
+    {{ store.qualification }}<br>
+    {{ store.hospital_info }}<br>
+    {{ store.consultation_info }}<br>
+    REGD. NO: {{ store.reg_no }}
+  </div>
+</div>
+
+<div class="details">
+  <div class="line"><b>FBS:</b> {{ slip.fbs }} <b>2HR.PPBS:</b> {{ slip.pbs }}</div>
+  <div class="line"><b>BP:</b> {{ slip.blood_pressure }} <b>WT:</b> {{ slip.weight }}</div>
+  <div class="line"><b>PULSE:</b> {{ slip.pulse }} <b>NEXT VISIT:</b> {{ slip.next_visit }}</div>
+  <hr>
+  <div class="line"><b>NAME:</b> {{ slip.patient_name }}</div>
+  <div class="line"><b>AGE:</b> {{ slip.age }} <b>SEX:</b> {{ slip.gender }}</div>
+  <div class="line"><b>MOBILE:</b> {{ slip.mobile }}</div>
+  <div class="line"><b>AMOUNT:</b> ₹ {{ slip.amount }}</div>
+</div>
+
+<div class="footer">
+  {{ store.footer_note }}
+</div>
+
+<div class="note">👁️ This is a preview for design layout only.</div>
+
+</body>
+</html>
